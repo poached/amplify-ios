@@ -23,22 +23,6 @@ type Comment @model {
     post: Post! @connection(name: "PostComment")
 }
 
-type Blog
-    @model
-    @auth(rules: [
-        { allow: owner, ownerField: "owner", operations: [create, read] },
-        { allow: groups, groups: ["Admin"] }
-    ]) {
-    id: ID!
-    content: String!
-    createdAt: AWSDateTime!
-    owner: String
-    authorsNotes: String @auth( rules: [
-        { allow: owner, ownerField: "owner", operations: [update] }
-    ])
-}
-
-
 type User @model {
     id: ID!
     name: String!
@@ -56,4 +40,19 @@ type UserFollowers @model {
   id: ID!
   user: User @connection(name: "followers")
   followersUser: User @connection
+}
+
+type Article
+    @model
+    @auth(rules: [
+        { allow: owner, ownerField: "owner", operations: [create, read] },
+        { allow: groups, groups: ["Admin"] }
+    ]) {
+    id: ID!
+    content: String!
+    createdAt: AWSDateTime!
+    owner: String
+    authorsNotes: String @auth( rules: [
+        { allow: owner, ownerField: "owner", operations: [update] }
+    ])
 }
