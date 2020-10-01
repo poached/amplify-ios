@@ -35,6 +35,8 @@ public extension AWSAPIPlugin {
 
         configure(using: dependencies)
 
+        ListDecoderRegistry.registerDecoder(AppSyncListDecoder.self)
+
         log.info("Configure finished")
     }
 }

@@ -31,7 +31,6 @@ class GraphQLModelBasedTests: XCTestCase {
 
             ModelRegistry.register(modelType: Comment.self)
             ModelRegistry.register(modelType: Post.self)
-
         } catch {
             XCTFail("Error during setup: \(error)")
         }
@@ -221,9 +220,12 @@ class GraphQLModelBasedTests: XCTestCase {
                     return
                 }
 
-                XCTAssertTrue(graphQLResponse.hasNext())
-                results = graphQLResponse
-                firstQueryCompleted.fulfill()
+                if let appSyncList = graphQLResponse.base as? AppSyncList<Post> {
+                    XCTAssertTrue(appSyncList.hasNext())
+                    results = appSyncList
+                    firstQueryCompleted.fulfill()
+                }
+
             case .failure(let error):
                 XCTFail("Unexpected .failure event: \(error)")
             }

@@ -95,6 +95,8 @@ final public class AWSDataStorePlugin: DataStoreCategoryPlugin {
                 Amplify.Hub.removeListener(token)
             }
         }
+
+        ListDecoderRegistry.registerDecoder(DataStoreListDecoder.self)
     }
 
     func reinitStorageEngineIfNeeded() {

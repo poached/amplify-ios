@@ -16,7 +16,7 @@ extension GraphQLResponseDecoder {
                                                   graphQLData: JSONValue,
                                                   document: String? = nil,
                                                   variables: [String: Any]? = nil) throws -> R {
-        if responseData is ListModel, let document = document {
+        if responseData is ListProtocol, let document = document {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = ModelDateFormatting.decodingStrategy
             let payload: AppSyncListPayload

@@ -33,7 +33,7 @@ protocol ModelGraphQLRequestFactory {
 
     static func paginatedList<M: Model>(_ modelType: M.Type,
                                       where predicate: QueryPredicate?,
-                                      limit: Int?) -> GraphQLRequest<AppSyncList<M>>
+                                      limit: Int?) -> GraphQLRequest<List<M>>
 
     /// Creates a `GraphQLRequest` that represents a query that expects a single value as a result.
     /// The request will be created with the correct correct document based on the `ModelSchema` and
@@ -192,7 +192,7 @@ extension GraphQLRequest: ModelGraphQLRequestFactory {
 
     public static func paginatedList<M: Model>(_ modelType: M.Type,
                                                where predicate: QueryPredicate? = nil,
-                                               limit: Int? = nil) -> GraphQLRequest<AppSyncList<M>> {
+                                               limit: Int? = nil) -> GraphQLRequest<List<M>> {
         var documentBuilder = ModelBasedGraphQLDocumentBuilder(modelType: modelType, operationType: .query)
         documentBuilder.add(decorator: DirectiveNameDecorator(type: .list))
 
@@ -203,10 +203,10 @@ extension GraphQLRequest: ModelGraphQLRequestFactory {
         documentBuilder.add(decorator: PaginationDecorator(limit: limit))
         let document = documentBuilder.build()
 
-        return GraphQLRequest<AppSyncList<M>>(document: document.stringValue,
-                                              variables: document.variables,
-                                              responseType: AppSyncList<M>.self,
-                                              decodePath: document.name)
+        return GraphQLRequest<List<M>>(document: document.stringValue,
+                                       variables: document.variables,
+                                       responseType: List<M>.self,
+                                       decodePath: document.name)
     }
 
     public static func subscription<M: Model>(of modelType: M.Type,

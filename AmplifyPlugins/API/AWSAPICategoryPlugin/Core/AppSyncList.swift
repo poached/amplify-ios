@@ -5,10 +5,11 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+import Foundation
 import Amplify
 
-public class AppSyncList<ModelType: Model>: List<ModelType> {
-
+public class AppSyncList<ModelType: Model>: BaseList<ModelType> {
+    /// The array of `Element` that backs the custom collection implementation.
     let nextToken: String?
     let document: String?
     let variables: [String: JSONValue]?
@@ -22,10 +23,10 @@ public class AppSyncList<ModelType: Model>: List<ModelType> {
         self.nextToken = nextToken
         self.document = document
         self.variables = variables
-        super.init(elements, associatedId: nil, associatedField: nil)
+        super.init(elements)
     }
 
-    required convenience init(arrayLiteral elements: List<ModelType>.Element...) {
+    required convenience public init(arrayLiteral elements: Element...) {
         self.init(elements)
     }
 

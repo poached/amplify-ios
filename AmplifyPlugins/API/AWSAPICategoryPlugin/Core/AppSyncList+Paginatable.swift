@@ -5,7 +5,16 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+import Foundation
 import Amplify
+
+public protocol Paginatable {
+    associatedtype Page
+    associatedtype PageError: Error
+    typealias PageResult = ((Result<Page, PageError>) -> Void)
+    func next(onComplete: @escaping PageResult)
+    func hasNext() -> Bool
+}
 
 extension AppSyncList: Paginatable {
 
