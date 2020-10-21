@@ -22,7 +22,7 @@ extension DataStoreCategory: DataStoreBaseBehavior {
                                 where predicate: QueryPredicate? = nil,
                                 sort sortInput: QuerySortInput? = nil,
                                 paginate paginationInput: QueryPaginationInput? = nil,
-                                completion: DataStoreCallback<[M]>) {
+                                completion: DataStoreCallback<List<M>>) {
         plugin.query(modelType, where: predicate, sort: sortInput, paginate: paginationInput, completion: completion)
     }
 

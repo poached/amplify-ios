@@ -84,7 +84,7 @@ public extension DataStoreBaseBehavior {
         where predicate: QueryPredicate? = nil,
         sort sortInput: QuerySortInput? = nil,
         paginate paginationInput: QueryPaginationInput? = nil
-    ) -> DataStorePublisher<[M]> {
+    ) -> DataStorePublisher<List<M>> {
         Future { promise in
             self.query(
                 modelType,

@@ -24,7 +24,7 @@ public protocol DataStoreBaseBehavior {
                          where predicate: QueryPredicate?,
                          sort sortInput: QuerySortInput?,
                          paginate paginationInput: QueryPaginationInput?,
-                         completion: DataStoreCallback<[M]>)
+                         completion: DataStoreCallback<List<M>>)
 
     func delete<M: Model>(_ model: M,
                           where predicate: QueryPredicate?,

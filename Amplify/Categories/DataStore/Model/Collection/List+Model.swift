@@ -18,7 +18,7 @@ open class List<ModelType: Model>: ModelList {
     public typealias Elements = [Element]
 
     /// The array of `Element` that backs the custom collection implementation.
-    internal var elements: Elements
+    public var elements: Elements
 
     // MARK: - Initializers
 
@@ -30,6 +30,10 @@ open class List<ModelType: Model>: ModelList {
 
     public required convenience init(arrayLiteral elements: ModelType...) {
         self.init(elements)
+    }
+
+    public func asArray() -> [Element] {
+        elements
     }
 
     // MARK: - Collection conformance
@@ -55,7 +59,7 @@ open class List<ModelType: Model>: ModelList {
     }
 
     // MARK: Persistant operations
-    
+
     public var totalCount: Int {
         // TODO handle total count
         return 0

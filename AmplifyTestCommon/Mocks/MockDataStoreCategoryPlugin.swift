@@ -39,7 +39,7 @@ class MockDataStoreCategoryPlugin: MessageReporter, DataStoreCategoryPlugin {
                          where predicate: QueryPredicate?,
                          sort sortInput: QuerySortInput?,
                          paginate paginationInput: QueryPaginationInput?,
-                         completion: (DataStoreResult<[M]>) -> Void) {
+                         completion: (DataStoreResult<List<M>>) -> Void) {
         notify("queryByPredicate")
     }
 

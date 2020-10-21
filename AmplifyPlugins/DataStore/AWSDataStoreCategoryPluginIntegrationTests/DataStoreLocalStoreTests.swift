@@ -62,6 +62,42 @@ class DataStoreLocalStoreTests: LocalStoreIntegrationTestBase {
         XCTAssertEqual(idSet.count, 15)
     }
 
+    /// - Given: 15 posts that has been saved
+    /// - When:
+    ///    - query with pagination input given a page number and limit 10
+    /// - Then:
+    ///    - first page returns the 10 (the defined limit) of 15 posts
+    ///    - second page via `getNextPage()` returns the remaining 5 posts
+    ///    - the 15 retrieved posts have unique identifiers
+    func testQueryAndFetchNextPage() throws {
+        _ = setUpLocalStore(numberOfPosts: 15)
+        var posts = [Post]()
+        let queryFirstTimeSuccess = expectation(description: "Query post completed")
+        var returnedPosts: List<Post>?
+        Amplify.DataStore.query(Post.self,
+                                paginate: .page(0, limit: 10)) { result in
+            switch result {
+            case .success(let returnPosts):
+                returnedPosts = returnPosts
+                posts.append(contentsOf: returnPosts)
+                queryFirstTimeSuccess.fulfill()
+            case .failure(let error):
+                XCTFail("Error querying posts: \(error)")
+            }
+        }
+        wait(for: [queryFirstTimeSuccess], timeout: 10)
+
+        XCTAssertEqual(posts.count, 10)
+
+        XCTAssertTrue(returnedPosts!.hasNextPage())
+        posts.append(contentsOf: try returnedPosts!.getNextPage())
+        XCTAssertEqual(posts.count, 15)
+
+        let idSet = Set(posts.map { $0.id })
+
+        XCTAssertEqual(idSet.count, 15)
+    }
+
     /// - Given: 20 posts that has been saved
     /// - When:
     ///    - attempt to query existing posts that are sorted by rating in ascending order
@@ -71,7 +107,7 @@ class DataStoreLocalStoreTests: LocalStoreIntegrationTestBase {
         _ = setUpLocalStore(numberOfPosts: 20)
 
         let querySuccess = expectation(description: "Query post completed")
-        var posts = [Post]()
+        var posts = List<Post>()
 
         Amplify.DataStore.query(Post.self,
                                 sort: .ascending(Post.keys.rating)) { result in
@@ -110,7 +146,7 @@ class DataStoreLocalStoreTests: LocalStoreIntegrationTestBase {
         _ = setUpLocalStore(numberOfPosts: 50)
 
         let querySuccess = expectation(description: "Query post completed")
-        var posts = [Post]()
+        var posts = List<Post>()
 
         Amplify.DataStore.query(Post.self,
                                 sort: .by(.ascending(Post.keys.rating),
@@ -160,7 +196,7 @@ class DataStoreLocalStoreTests: LocalStoreIntegrationTestBase {
         _ = setUpLocalStore(numberOfPosts: 20)
 
         let querySuccess = expectation(description: "Query post completed")
-        var posts = [Post]()
+        var posts = List<Post>()
 
         Amplify.DataStore.query(Post.self,
                                 where: Post.keys.rating >= 2,
@@ -201,7 +237,7 @@ class DataStoreLocalStoreTests: LocalStoreIntegrationTestBase {
         _ = setUpLocalStore(numberOfPosts: 20)
 
         let querySuccess = expectation(description: "Query post completed")
-        var posts = [Post]()
+        var posts = List<Post>()
 
         Amplify.DataStore.query(Post.self,
                                 sort: .by(.ascending(Post.keys.rating),
@@ -244,7 +280,7 @@ class DataStoreLocalStoreTests: LocalStoreIntegrationTestBase {
         let count = filteredPosts.count
 
         let querySuccess = expectation(description: "Query post completed")
-        var posts = [Post]()
+        var posts = List<Post>()
         Amplify.DataStore.query(Post.self,
                                 where: Post.keys.rating >= 2,
                                 sort: .ascending(Post.keys.rating),

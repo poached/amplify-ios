@@ -26,9 +26,6 @@ public class DataStoreList<ModelType: Model>: List<ModelType>, ModelListDecoder 
     /// of `Post` will have a reference to the `post` field in `Comment`.
     internal var associatedField: ModelField?
 
-    /// The array of `Element` that backs the custom collection implementation.
-    internal var elements: Elements = []
-
     /// The current state of lazily loaded list
     internal var state: LoadState = .pending
 
@@ -53,22 +50,22 @@ public class DataStoreList<ModelType: Model>: List<ModelType>, ModelListDecoder 
 
     public override var startIndex: Index {
         loadIfNeeded()
-        return elements.startIndex
+        return super.startIndex
     }
 
     public override var endIndex: Index {
         loadIfNeeded()
-        return elements.endIndex
+        return super.endIndex
     }
 
     public override func index(after index: Index) -> Index {
         loadIfNeeded()
-        return elements.index(after: index)
+        return super.index(after: index)
     }
 
     public __consuming override func makeIterator() -> IndexingIterator<Elements> {
         loadIfNeeded()
-        return elements.makeIterator()
+        return super.makeIterator()
     }
 
     // MARK: ModelListDecoder

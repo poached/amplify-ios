@@ -52,8 +52,8 @@ extension DataStoreList {
         let predicate: QueryPredicate = field(name) == associatedId
         Amplify.DataStore.query(Element.self, where: predicate) {
             switch $0 {
-            case .success(let elements):
-                self.elements = elements
+            case .success(let list):
+                self.elements = list.asArray()
                 self.state = .loaded
                 completion(.success(elements))
             case .failure(let error):

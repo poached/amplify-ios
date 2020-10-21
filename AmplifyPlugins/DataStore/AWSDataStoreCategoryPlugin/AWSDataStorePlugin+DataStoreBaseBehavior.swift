@@ -66,7 +66,7 @@ extension AWSDataStorePlugin: DataStoreBaseBehavior {
             switch $0 {
             case .success(let models):
                 do {
-                    let first = try models.unique()
+                    let first = try models.asArray().unique()
                     completion(.success(first))
                 } catch {
                     completion(.failure(causedBy: error))
@@ -81,13 +81,20 @@ extension AWSDataStorePlugin: DataStoreBaseBehavior {
                                 where predicate: QueryPredicate? = nil,
                                 sort sortInput: QuerySortInput? = nil,
                                 paginate paginationInput: QueryPaginationInput? = nil,
-                                completion: DataStoreCallback<[M]>) {
+                                completion: DataStoreCallback<List<M>>) {
         reinitStorageEngineIfNeeded()
         storageEngine.query(modelType,
                             predicate: predicate,
                             sort: sortInput,
                             paginationInput: paginationInput,
-                            completion: completion)
+                            completion: { result in
+                                switch result {
+                                case .success(let models):
+                                    completion(.success(DataStoreList<M>(models)))
+                                case .failure(let dataStoreError):
+                                    completion(.failure(dataStoreError))
+                                }
+                            })
     }
 
     public func delete<M: Model>(_ modelType: M.Type,
