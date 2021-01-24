@@ -89,6 +89,12 @@ class MockAWSMobileClient: AWSMobileClientBehavior {
         prepareResult(mockResult: showSignInMockResult, completionHandler: completionHandler)
     }
 
+    func showSignIn(uiwindow: UIWindow,
+                    hostedUIOptions: HostedUIOptions,
+                    _ completionHandler: @escaping (UserState?, Error?) -> Void) {
+        prepareResult(mockResult: showSignInMockResult, completionHandler: completionHandler)
+    }
+
     func confirmSignIn(challengeResponse: String,
                        userAttributes: [String: String],
                        clientMetaData: [String: String],

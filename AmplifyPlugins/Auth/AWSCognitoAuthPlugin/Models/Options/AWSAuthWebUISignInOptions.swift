@@ -24,8 +24,24 @@ public struct AWSAuthWebUISignInOptions {
     /// are using Auth0, specify the `federationProviderName` as <your_domain>.auth0.com.
     public let federationProviderName: String?
 
-    public init(idpIdentifier: String? = nil, federationProviderName: String? = nil) {
+    /// Start the webUI signin in a private browser session.
+    ///
+    /// Internally this sets the ASWebAuthentication session's prefersEphemeralWebBrowserSession = true.
+    public let usePrivateSession: Bool
+
+    public init(idpIdentifier: String? = nil,
+                federationProviderName: String? = nil) {
         self.idpIdentifier = idpIdentifier
         self.federationProviderName = federationProviderName
+        self.usePrivateSession = false
+    }
+
+    @available(iOS 13, *)
+    public init(idpIdentifier: String? = nil,
+                federationProviderName: String? = nil,
+                usePrivateSession: Bool = false) {
+        self.idpIdentifier = idpIdentifier
+        self.federationProviderName = federationProviderName
+        self.usePrivateSession = usePrivateSession
     }
 }
